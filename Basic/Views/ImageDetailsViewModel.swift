@@ -11,6 +11,15 @@ import SwiftUI
 final class ImageDetailsViewModel: ObservableObject {
 
     
+    func uiImageFrom(urlString: String?) -> UIImage? {
+        guard let urlString = urlString,
+                let url = URL(string: urlString),
+                let imageData = try? Data(contentsOf: url) else { return nil }
+       
+        return UIImage(data: imageData)
+        
+    }
+    
     func getUIImageFromUrl(urlString: String?) -> UIImage?{
         guard urlString != nil else {return nil}
         guard let url = NSURL(string: urlString!) as? URL else {return nil}
