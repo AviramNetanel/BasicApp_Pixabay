@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-
+/*
 class APIService { // This class should only dispatch network requests and return parsed json models( and even this is arguable), the function add params shouldn't be in this class
     // I'd rather use a different util class to construct you URL with query parameters using URLComponents (see this: https://cocoacasts.com/working-with-nsurlcomponents-in-swift)
 
@@ -62,4 +62,4 @@ class APIService { // This class should only dispatch network requests and retur
     }
 }
 
-
+*/

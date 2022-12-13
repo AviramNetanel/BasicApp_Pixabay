@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResponseModel: Codable {
+struct HitResponseModel: Decodable {
     
     var total: Int
     var totalHits: Int

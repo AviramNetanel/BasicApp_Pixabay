@@ -56,18 +56,6 @@ struct ImagesTableView: View {
                                             .font(.title)
                                     }
                                 }
-            
-        
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addPhoto) {
-//                        Label("GET Photos", systemImage: "plus")
-//                    }
-//                }
-//            }
         }//NavigationView
         
         
@@ -76,9 +64,10 @@ struct ImagesTableView: View {
 }//ImagesTableView struct
 
 
+//PREVIEW: (unmark to enable canvas)
 //struct ContentView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        ContentView().environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+//        ImagesTableView(viewModel: <#T##ImagesTableViewModel#>)
 //    }
 //}
 

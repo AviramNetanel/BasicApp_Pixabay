@@ -10,15 +10,16 @@ import SDWebImageSwiftUI
 
 struct ImageDetailsView: View {
     
-    @State var items : [Any] = []
-    @State var isSheetPresented = false
+    @State private var items : [Any] = []
+    @State private var isSheetPresented = false
+    @State private var isAnimating: Bool = true
+    @State private var orientation = UIDeviceOrientation.unknown
     
-    @StateObject var viewModel = ImageDetailsViewModel()
-    @ObservedObject var imageManager = ImageManager()
+    @StateObject private var viewModel = ImageDetailsViewModel()
+    @ObservedObject private var imageManager = ImageManager()
     
     @Binding var photo : Photo
-    @State var isAnimating: Bool = true
-    @State private var orientation = UIDeviceOrientation.unknown
+
     
     var body: some View {
         
@@ -35,10 +36,8 @@ struct ImageDetailsView: View {
                         }
                     }){
                         HStack{
-//                            Image("TitleIcon")
                             Text("Share Image")
                             Image(systemName: "square.and.arrow.up")
-//                                .foregroundColor(.black)
                         }
                     }
                 .sheet(isPresented: $isSheetPresented, content: {
@@ -54,13 +53,13 @@ struct ImageDetailsView: View {
                 //WebImage :
                 webImageView
                 
-                //For DEMO
+               //For DEMO \ Preview
 //                HStackKeyValueText(key: "Image Views:", value: "1231221")//views
 //                HStackKeyValueText(key: "Downloads:", value: "33333") //downloads
 //                HStackKeyValueText(key: "Image Tags:", value: "blue, sky, white, ass") //tags
 //                HStackKeyValueText(key: "User Name:", value: "Aviram") //user name
-//
 //                WebImage(url: URL(string: Constants.baseUrl))
+                
                 
                 // Supports options and context,
                 // like `.delayPlaceholder` to show placeholder only when error
@@ -130,6 +129,7 @@ struct HStackKeyValueText : View{
     }
 }
 
+//PREVIEW: (unmark to enable canvas)
 //struct ImageDetailsView_Previews: PreviewProvider {
 //    static var previews: some View {
 ////        ImageDetailsView()

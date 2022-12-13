@@ -31,17 +31,7 @@ struct ImageCellView: View {
             .transition(.fade(duration: 0.5)) // Fade Transition with duration
             .scaledToFit()
             .frame(height: 300, alignment: .center)
-//                .overlay(alignment: .bottomLeading, content: {
-//                    BubbleView(text: "Likes: ", number: Int(photo.likes))
-//                        .padding(.leading,5)
-//                        .padding(.bottom,30)
-//                })
-//
-//                .overlay(alignment: .bottomTrailing, content: {
-//                    BubbleView(text: "Comments: ", number: Int(photo.comments))
-//                        .padding(.trailing,5)
-//                        .padding(.bottom,30)
-//                })
+
             VStack{
                 Spacer()
                 HStack{
@@ -57,38 +47,9 @@ struct ImageCellView: View {
                 }
                 .padding(.bottom,20)
             }
-        }
-        
-//        AsyncImage(
-//            url: URL(string: photo.previewURL ?? ""),
-//                content: { image in
-//                    image.resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(alignment: .center)
-//                        .overlay(alignment: .bottomLeading, content: {
-//                            BubbleView(text: "Likes: ", number: Int(photo.likes))
-//                                .padding(.leading,5)
-//                        })
-//
-//                        .overlay(alignment: .bottomTrailing, content: {
-//                            BubbleView(text: "Comments: ", number: Int(photo.comments))
-//                                .padding(.trailing,5)
-//                        })
-//                },
-//                placeholder: {
-//                    ZStack{
-//                        Image("BG_icon").resizable()
-//                            .aspectRatio(contentMode: .fit)
-//                            .frame(alignment: .center)
-//                            .opacity(0.3)
-//                        ProgressView()
-//                            .frame(alignment: .center)
-//                            .aspectRatio(contentMode: .fit)
-//                    }
-//                }
-//            )
-    }
-}
+        }//ZStack
+    }//body
+}//ImageCellView
 
 struct BubbleView : View{
     let text : String
@@ -106,6 +67,8 @@ struct BubbleView : View{
     }
 }
 
+
+//PREVIEW:
 struct ImageViewCell_Previews: PreviewProvider {
     static var previews: some View {
         BubbleView(text: "Likes", number: 124)

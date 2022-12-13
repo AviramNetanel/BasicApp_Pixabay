@@ -18,10 +18,10 @@ final class NewAsyncApiServiceTests: XCTestCase {
     
     func testNoResponseError() async{
         let mockedSession = MockURLSession()
-        let apiService = NewAsyncApiService<ResponseModel>(session: mockedSession)
+        let apiService = NetworkManager<HitResponseModel>(session: mockedSession)
         
         do {
-            let _ : ResponseModel = try await apiService.data(withURL: urlDummyURL)
+            let _ : HitResponseModel = try await apiService.data(withURL: urlDummyURL)
             XCTFail("A failure is expected")
         } catch {
             XCTAssertEqual(error as? TestErrors, .noResponseError)
@@ -32,7 +32,7 @@ final class NewAsyncApiServiceTests: XCTestCase {
     func testResponseFromJsonFile() async throws{
         let data = FileDataReader().read(from: "Response", fileExtension: "json")
         let mockedSession = MockURLSession(result: .success(data))
-        let apiService = NewAsyncApiService<ResponseModel>(session: mockedSession)
+        let apiService = NetworkManager<HitResponseModel>(session: mockedSession)
         let response = try await apiService.data(withURL: urlDummyURL)
         XCTAssertTrue(response.total != 0)
         XCTAssertTrue(response.totalHits != 0)
@@ -42,7 +42,7 @@ final class NewAsyncApiServiceTests: XCTestCase {
     func testResponseHttpError() async throws{
     
         let mockedSession = MockURLSession(result: .failure(TestErrors.httpError_200))
-        let apiService = NewAsyncApiService<ResponseModel>(session: mockedSession)
+        let apiService = NewAsyncApiService<HitResponseModel>(session: mockedSession)
         do {
             let response = try await apiService.data(withURL: urlDummyURL)
         } catch {

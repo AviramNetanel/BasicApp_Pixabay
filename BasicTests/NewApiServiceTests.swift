@@ -20,7 +20,7 @@ final class NewApiServiceTests: XCTestCase {
     
     func testNoResponseError(){
         let mockedSession = MockURLSession()
-        let apiService = NewApiService<ResponseModel>(session: mockedSession)
+        let apiService = NewApiService<HitResponseModel>(session: mockedSession)
         apiService.data(withURL: dummyURL) { result in
             switch result {
             case .success:
@@ -34,7 +34,7 @@ final class NewApiServiceTests: XCTestCase {
     func testResponseFromJsonFile() async throws{
         let data = FileDataReader().read(from: "Response", fileExtension: "json")
         let mockedSession = MockURLSession(result: .success(data))
-        let apiService = NewApiService<ResponseModel>(session: mockedSession)
+        let apiService = NewApiService<HitResponseModel>(session: mockedSession)
         
         apiService.data(withURL: dummyURL) { result in
             switch result {
@@ -51,7 +51,7 @@ final class NewApiServiceTests: XCTestCase {
     
     func testResponseHttpError() async throws{
         let mockedSession = MockURLSession(result: .failure(TestErrors.httpError_200))
-        let apiService = NewApiService<ResponseModel>(session: mockedSession)
+        let apiService = NewApiService<HitResponseModel>(session: mockedSession)
         
         apiService.data(withURL: dummyURL) { result in
             switch result {
@@ -66,7 +66,7 @@ final class NewApiServiceTests: XCTestCase {
     
     func testResponse2() throws{
         let mockedSession = MockURLSession(result: .failure(TestErrors.httpError_200))
-        let apiService = NewApiService<ResponseModel>(session: mockedSession)
+        let apiService = NewApiService<HitResponseModel>(session: mockedSession)
         
         apiService.data(withURL: dummyURL) { result in
             switch result {
@@ -88,11 +88,11 @@ final class NewApiServiceTests: XCTestCase {
     
     func testResponseAsync() async {
         let mockedSession = MockURLSession()
-        let apiService = NewAsyncApiService<ResponseModel>(session: mockedSession)
+        let apiService = NetworkManager<HitResponseModel>(session: mockedSession)
         
         do {
-            let response1 = try await apiService.data(withURL: dummyURL)
-            let response2 = try await apiService.data(withURL: dummyURL2)
+            let response1 = try await apiService.fetchData(withURL: dummyURL)
+            let response2 = try await apiService.fetchData(withURL: dummyURL2)
             
         } catch {
             print(error)
