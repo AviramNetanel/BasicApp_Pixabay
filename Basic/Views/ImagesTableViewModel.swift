@@ -13,6 +13,7 @@ final class ImagesTableViewModel: ObservableObject {
     
     let apiService = NetworkManager<HitResponseModel>()
     
+    let persistenceController = PersistenceController.shared
     let viewContext = PersistenceController.shared.viewContext
     
     @Published var allPhotos:[Photo] = PersistenceController.shared.fetchAllPhotos()
@@ -20,26 +21,16 @@ final class ImagesTableViewModel: ObservableObject {
     @Published var subject : String =  ""
     @Published var category : String = "all"
 
-//    private func addPhoto(hit : HitModel) { // do you ned this function?
-//        withAnimation {
-//            let newPhoto = Photo(context: viewContext)
-//
-//            do {
-//                try viewContext.save()
-//            } catch {
-//                // Replace this implementation with code to handle the error appropriately.
-//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-//                let nsError = error as NSError
-//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-//            }
-//        }
-//    }
-    
     func sendRequestAndReload() async{
         allPhotos = []
+        print("All Photos BEFORE request: \(allPhotos.count)")
+        print("Core-Data BEFOER request: \(persistenceController.fetchAllPhotos().count)")
+        
         await getHitsFromApiService()
         
-        allPhotos = PersistenceController.shared.fetchPhotosWith(filtersDic: getFiltersDic())
+        allPhotos = persistenceController.fetchPhotosWith(filtersDic: getFiltersDic())
+        print("All Photos AFTER request: \(allPhotos.count)")
+        print("All Photos AFTER request: \(persistenceController.fetchAllPhotos().count)")
     }
     
     func getFiltersDic() -> [String : String] {
@@ -47,24 +38,6 @@ final class ImagesTableViewModel: ObservableObject {
         if category != "all" { filtersDic["category"] = category }
         if subject != ""    { filtersDic["subject"] = subject }
         return filtersDic
-    }
-    
-    fileprivate func handleSuccess(_ response: HitResponseModel) {
-        allPhotos = response.hits.filter { hit in
-                guard let likesCount = hit.likes,
-                      let commentsCount = hit.comments,
-                      likesCount > 51 && commentsCount > 21 else { return false }
-                return true
-        }.map { hitModel in
-            Photo(withHitModel: hitModel,
-                  context: self.viewContext)
-        }.sorted {$0.likes > $1.likes}
-        
-        do{
-            try self.viewContext.save()
-        }catch{
-            print("ERROR: saving viewContent!")
-        }
     }
     
     func getHitsFromApiService() async {
@@ -78,13 +51,42 @@ final class ImagesTableViewModel: ObservableObject {
         
         do{
             let result = try await apiService.fetchData(withURL: urlWithParams)
-                print("RESPONSE RESULT: \(result)\n")
+            print("RESPONSE result.total: \(result.total) | result.hits.count: \(result.hits.count)")
                 handleSuccess(result)
         }
         catch{
             print("Network error: \(error).")
         }
     }//getHitsFromApiService
+    
+    fileprivate func handleSuccess(_ response: HitResponseModel) {
+        let _ :[Photo] = response.hits.filter { hit in
+                guard let likesCount = hit.likes,
+                      let commentsCount = hit.comments,
+                      likesCount > 51 && commentsCount > 21 else { return false }
+            if persistenceController.fetchPhoto(photoId: hit.id) != nil {
+                print("photo \(hit.id) was filtered!")
+                return false
+            }
+                return true
+        }.map { hitModel in
+            let photo = Photo(withHitModel: hitModel,
+                  context: self.viewContext)
+            if category != "all"{
+                photo.category = category
+            }
+            return photo
+            
+        }.sorted {$0.likes > $1.likes}
+        
+        do{
+            try self.viewContext.save()
+        }catch{
+            print("ERROR: saving viewContent!")
+        }
+    }
+    
+
         
     
     func buildParamsDictionary() -> [String: String]{

@@ -2,7 +2,7 @@
 //  NewApiService.swift
 //  Basic
 //
-//  Created by Marat Ibragimov on 02/12/2022.
+//  Created by Aviram Netanel on 02/12/2022.
 //
 
 import Foundation

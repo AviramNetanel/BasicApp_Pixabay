@@ -36,9 +36,7 @@ extension Photo {
         self.webformatURL = hit.webformatURL
         self.webformatHeight = Int32(hit.webformatHeight ?? 0)
         self.webformatWidth = Int32(hit.webformatWidth ?? 0)
-        
-        if category != "all" { self.category = category }
-        
+                
     }
 
 }

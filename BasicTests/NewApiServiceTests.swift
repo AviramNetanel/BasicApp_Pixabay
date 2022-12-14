@@ -2,7 +2,7 @@
 //  NewApiServiceTests.swift
 //  BasicTests
 //
-//  Created by Marat Ibragimov on 03/12/2022.
+//  Created by Aviram Netanel on 03/12/2022.
 //
 
 import XCTest

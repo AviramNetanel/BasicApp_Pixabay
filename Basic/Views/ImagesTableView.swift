@@ -24,7 +24,6 @@ struct ImagesTableView: View {
                     ForEach($viewModel.allPhotos, id: \.id) { photo in
                         NavigationLink {
                             ImageDetailsView(photo: photo)
-
                         } label: {
                             ImageCellView(photo: photo)
                         }
@@ -32,7 +31,7 @@ struct ImagesTableView: View {
                 }//List
                     .listStyle(PlainListStyle())
                     .task {
-                        await viewModel.getHitsFromApiService()
+                        await viewModel.sendRequestAndReload()
                     }
             }//VStack
             

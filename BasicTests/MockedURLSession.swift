@@ -2,7 +2,7 @@
 //  MockedURLSession.swift
 //  BasicTests
 //
-//  Created by Marat Ibragimov on 03/12/2022.
+//  Created by Aviram Netanel on 03/12/2022.
 //
 
 import Foundation
@@ -26,7 +26,7 @@ class MockURLSession {
 
 extension MockURLSession: SessionProtocolAsync {
     func data(from url: URL, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
-        guard let result else {
+        guard let result = result else {
             throw TestErrors.noResponseError
         }
 
