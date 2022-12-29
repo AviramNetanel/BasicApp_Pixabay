@@ -7,7 +7,7 @@
 import Foundation
 
 
-struct HitModel :  Codable, Hashable {
+struct HitModel :  Decodable, Hashable {
 
     var id      : Int
     var pageURL : String?

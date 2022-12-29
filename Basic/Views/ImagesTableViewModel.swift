@@ -36,7 +36,7 @@ final class ImagesTableViewModel: ObservableObject {
     func getFiltersDic() -> [String : String] {
         var filtersDic : [String : String] = [:]
         if category != "all" { filtersDic["category"] = category }
-        if subject != ""    { filtersDic["subject"] = subject }
+        if subject != ""    { filtersDic["subject"] = subject.lowercased() }
         return filtersDic
     }
     
@@ -62,8 +62,9 @@ final class ImagesTableViewModel: ObservableObject {
     fileprivate func handleSuccess(_ response: HitResponseModel) {
         let _ :[Photo] = response.hits.filter { hit in
                 guard let likesCount = hit.likes,
-                      let commentsCount = hit.comments,
-                      likesCount > 51 && commentsCount > 21 else { return false }
+                      let commentsCount = hit.comments
+//                      likesCount > 51 && commentsCount > 21
+                    else { return false }
             if persistenceController.fetchPhoto(photoId: hit.id) != nil {
                 print("photo \(hit.id) was filtered!")
                 return false
@@ -100,7 +101,7 @@ final class ImagesTableViewModel: ObservableObject {
             result["category"] = category
         }
         if !subject.isEmpty {
-            result["q"] = subject
+            result["q"] = subject.lowercased()
         }
         
         return result

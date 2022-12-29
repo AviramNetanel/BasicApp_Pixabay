@@ -23,7 +23,7 @@ typealias SessionResponse = (data: Data, urlResponse: URLResponse)
 class NetworkManager<JSONResponse: Decodable>{
     
     // This allows us to mock the network call and write unit tests for our API service
-    private let session: SessionProtocolAsync
+     let session: SessionProtocolAsync
     
     init(){
         session = URLSession.init(configuration: NetworkManager.setConfig())

@@ -74,6 +74,8 @@ struct PersistenceController {
         
         //subject filter:
         if let subject = filtersDic["subject"]{
+            var splittedText = subject.split(separator: " ")
+            
             let subjectPredicate = NSPredicate(
                 format: "tags CONTAINS %@" , subject
             )
