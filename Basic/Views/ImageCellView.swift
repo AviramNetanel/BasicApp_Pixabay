@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 struct ImageCellView: View {
     
     @Binding var photo : Photo
-    @State var isAnimating: Bool = true
+    @State private var isAnimating: Bool = true
 
     var body: some View {
        

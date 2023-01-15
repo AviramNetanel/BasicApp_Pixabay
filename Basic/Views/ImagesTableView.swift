@@ -11,7 +11,7 @@ import CoreData
 
 struct ImagesTableView: View {
 
-    @ObservedObject var viewModel: ImagesTableViewModel
+    @StateObject var viewModel = ImagesTableViewModel()
     
     var body: some View {
                 
@@ -20,20 +20,28 @@ struct ImagesTableView: View {
 
                 SettingsPanelView(viewModel: viewModel)
                 List {
-                    
-                    ForEach($viewModel.allPhotos, id: \.id) { photo in
+                    ForEach(0..<$viewModel.photosVisible.count, id:\.self) { i in
                         NavigationLink {
-                            ImageDetailsView(photo: photo)
+                            ImageDetailsView(photo: $viewModel.photosVisible[i])
                         } label: {
-                            ImageCellView(photo: photo)
+                            ImageCellView(photo: $viewModel.photosVisible[i])
+                            
+                        }.onAppear(){
+                            Task{
+                                await self.viewModel.loadMoreContent(currentItemIndex: i)
+                                print("photo index:\(i)")
+                            }
                         }
                     }
                 }//List
                     .listStyle(PlainListStyle())
                     .task {
-                        await viewModel.sendRequestAndReload()
+                        if viewModel.photosVisible.count == 0{
+                            await viewModel.sendRequestAndReload()
+                        }
                     }
             }//VStack
+            
             
             .onAppear {
                     UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation") // Forcing the rotation to portrait

@@ -16,38 +16,44 @@ final class ImagesTableViewModel: ObservableObject {
     let persistenceController = PersistenceController.shared
     let viewContext = PersistenceController.shared.viewContext
     
-    @Published var allPhotos:[Photo] = PersistenceController.shared.fetchAllPhotos()
+    var page = 1
+    var total_pages = 1
+    var results_per_page = 20
+        
+    @Published var photosVisible:[Photo]
     
     @Published var subject : String =  ""
     @Published var category : String = "all"
 
+    init(){
+        photosVisible = PersistenceController.shared.fetchAllPhotos()
+        print("Photos Count:\(photosVisible.count)")
+    }
+    
     func sendRequestAndReload() async{
-        allPhotos = []
-        print("All Photos BEFORE request: \(allPhotos.count)")
+        photosVisible = []
+        print("All Photos BEFORE request: \(photosVisible.count)")
         print("Core-Data BEFOER request: \(persistenceController.fetchAllPhotos().count)")
         
         await getHitsFromApiService()
         
-        allPhotos = persistenceController.fetchPhotosWith(filtersDic: getFiltersDic())
-        print("All Photos AFTER request: \(allPhotos.count)")
+        photosVisible = persistenceController.fetchPhotosWith(filtersDic: getFiltersDic())
+        print("All Photos AFTER request: \(photosVisible.count)")
         print("All Photos AFTER request: \(persistenceController.fetchAllPhotos().count)")
     }
     
     func getFiltersDic() -> [String : String] {
         var filtersDic : [String : String] = [:]
         if category != "all" { filtersDic["category"] = category }
-        if subject != ""    { filtersDic["subject"] = subject.lowercased() }
+        if subject != "" { filtersDic["subject"] = subject.lowercased() }
         return filtersDic
     }
     
     func getHitsFromApiService() async {
-//        API-SERVICE - sends GET request
-//        APIService.category = category
-//        APIService.q = subject // this an the line above are anti pattern, why do you use this global state just for a query text, its a bad practice, its not thread safe an not testable.
         
         let optionalParams = buildParamsDictionary()
         
-        guard let urlWithParams = UrlWithParams(urlString: Constants.baseUrl, optionalParameters: optionalParams).urlComponents?.url else {return}
+        guard let urlWithParams = URLParamsBuilder(urlString: Constants.baseUrl, optionalParameters: optionalParams).urlComponents?.url else {return}
         
         do{
             let result = try await apiService.fetchData(withURL: urlWithParams)
@@ -60,13 +66,16 @@ final class ImagesTableViewModel: ObservableObject {
     }//getHitsFromApiService
     
     fileprivate func handleSuccess(_ response: HitResponseModel) {
+        self.total_pages = response.totalHits / self.results_per_page
+        print("page: \(self.page)\\\(self.total_pages) || \(self.results_per_page)X\(self.page)\\\(response.totalHits)")
+        
         let _ :[Photo] = response.hits.filter { hit in
                 guard let likesCount = hit.likes,
-                      let commentsCount = hit.comments
-//                      likesCount > 51 && commentsCount > 21
+                      let commentsCount = hit.comments,
+                      likesCount >= 0 && commentsCount >= 0 //EDIT HERE FOR Likes\Comments filtering!
                     else { return false }
             if persistenceController.fetchPhoto(photoId: hit.id) != nil {
-                print("photo \(hit.id) was filtered!")
+                print("photo \(hit.id) already exists in core-data!")
                 return false
             }
                 return true
@@ -80,22 +89,21 @@ final class ImagesTableViewModel: ObservableObject {
             
         }.sorted {$0.likes > $1.likes}
         
+        self.page += 1
+        
         do{
             try self.viewContext.save()
         }catch{
             print("ERROR: saving viewContent!")
         }
     }
-    
 
         
     
     func buildParamsDictionary() -> [String: String]{
         var result : [String : String] = [:]
         
-//        if !Constants.key.isEmpty{
-//            result["key"] = Constants.key
-//        }
+        result["page"] = "\(self.page)"
         
         if category != "all"{
             result["category"] = category
@@ -106,6 +114,19 @@ final class ImagesTableViewModel: ObservableObject {
         
         return result
     }
+    
+    
+    //MARK: - PAGINATION
+        func loadMoreContent(currentItemIndex itemIndex: Int) async{
+            let thresholdIndex = self.photosVisible.index(self.photosVisible.endIndex, offsetBy: -1)
+            print("itemIndex#\(itemIndex)")
+            if thresholdIndex == itemIndex,
+               page <= self.total_pages {
+                page += 1
+                print("requesting for page#\(page)")
+                await sendRequestAndReload()
+            }
+        }
     
 }//ImagesTableViewModel
 

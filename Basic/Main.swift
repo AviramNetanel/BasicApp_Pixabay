@@ -16,7 +16,7 @@ struct BasicApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ImagesTableView(viewModel: ImagesTableViewModel())
+            ImagesTableView()
         }
     }
 }

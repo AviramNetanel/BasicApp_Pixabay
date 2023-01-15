@@ -75,7 +75,6 @@ struct ImageDetailsView: View {
                 .scaledToFit()
                 .frame(height: 300, alignment: .center)
                 
-                
                 Spacer()
                 
             }//VStack
@@ -99,7 +98,7 @@ struct ImageDetailsView: View {
     }//body
     
     func initImageManagerAndGetWebImage(urlString: String?) -> WebImage{
-        let url = URL(string: photo.largeImageURL ?? "")
+        let url = URL(string: urlString ?? "")
         imageManager.load(url: url)
         return WebImage(url: url, isAnimating: $isAnimating)
     }
