@@ -11,6 +11,8 @@ import CoreData
 @MainActor
 final class ImagesTableViewModel: ObservableObject {
     
+    @ObservedObject var filtersPanelVM : FiltersPanelViewModel
+    
     let apiService = NetworkManager<HitResponseModel>()
     
     let persistenceController = PersistenceController.shared
@@ -20,34 +22,34 @@ final class ImagesTableViewModel: ObservableObject {
     var total_pages = 1
     var results_per_page = 20
         
-    @Published var photosVisible:[Photo]
+    @State var isLoading = false
     
-    @Published var subject : String =  ""
-    @Published var category : String = "all"
+    @Published var photosVisible:[Photo]
 
     init(){
         photosVisible = PersistenceController.shared.fetchAllPhotos()
-        print("Photos Count:\(photosVisible.count)")
+        filtersPanelVM = FiltersPanelViewModel.shared
     }
     
     func sendRequestAndReload() async{
         photosVisible = []
+        await sendRequestAndLoad()
+    }
+    
+    func sendRequestAndLoad() async{
+        isLoading = true
+//        photosVisible = []
         print("All Photos BEFORE request: \(photosVisible.count)")
         print("Core-Data BEFOER request: \(persistenceController.fetchAllPhotos().count)")
         
         await getHitsFromApiService()
         
-        photosVisible = persistenceController.fetchPhotosWith(filtersDic: getFiltersDic())
+        photosVisible = persistenceController.fetchPhotosWith(filtersDic: filtersPanelVM.getFiltersDic())
         print("All Photos AFTER request: \(photosVisible.count)")
         print("All Photos AFTER request: \(persistenceController.fetchAllPhotos().count)")
     }
     
-    func getFiltersDic() -> [String : String] {
-        var filtersDic : [String : String] = [:]
-        if category != "all" { filtersDic["category"] = category }
-        if subject != "" { filtersDic["subject"] = subject.lowercased() }
-        return filtersDic
-    }
+    
     
     func getHitsFromApiService() async {
         
@@ -82,14 +84,15 @@ final class ImagesTableViewModel: ObservableObject {
         }.map { hitModel in
             let photo = Photo(withHitModel: hitModel,
                   context: self.viewContext)
-            if category != "all"{
-                photo.category = category
+            if filtersPanelVM.category != "all"{
+                photo.category = filtersPanelVM.category
             }
             return photo
             
         }.sorted {$0.likes > $1.likes}
         
         self.page += 1
+        self.isLoading = false
         
         do{
             try self.viewContext.save()
@@ -97,19 +100,17 @@ final class ImagesTableViewModel: ObservableObject {
             print("ERROR: saving viewContent!")
         }
     }
-
-        
     
     func buildParamsDictionary() -> [String: String]{
         var result : [String : String] = [:]
         
         result["page"] = "\(self.page)"
         
-        if category != "all"{
-            result["category"] = category
+        if filtersPanelVM.category != "all"{
+            result["category"] = filtersPanelVM.category
         }
-        if !subject.isEmpty {
-            result["q"] = subject.lowercased()
+        if !filtersPanelVM.subject.isEmpty {
+            result["q"] = filtersPanelVM.subject.lowercased()
         }
         
         return result
@@ -124,7 +125,7 @@ final class ImagesTableViewModel: ObservableObject {
                page <= self.total_pages {
                 page += 1
                 print("requesting for page#\(page)")
-                await sendRequestAndReload()
+                await sendRequestAndLoad()
             }
         }
     

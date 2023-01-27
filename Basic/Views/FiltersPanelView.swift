@@ -1,5 +1,5 @@
 //
-//  SettingsPanelView.swift
+//  FiltersPanelView.swift
 //  
 //
 //  Created by Aviram Netanel on 6/11/22.
@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct SettingsPanelView: View {
+struct FiltersPanelView: View {
     
-    @ObservedObject var viewModel: ImagesTableViewModel
-    
+    @ObservedObject var parentVM: ImagesTableViewModel
+
+    @StateObject var viewModel = FiltersPanelViewModel.shared
+
     @State private var selectedCategoryIndex : Int = 0
-    @State var isExpanded: Bool = false
+    @State private var isExpanded: Bool = false
 
     var body: some View {
         Color.gray.opacity(0.1).overlay(
@@ -32,11 +34,11 @@ struct SettingsPanelView: View {
                         .onChange(of: selectedCategoryIndex){ _ in
                             viewModel.category = Constants.categoriesArray[selectedCategoryIndex]
                             Task {
-                                await viewModel.sendRequestAndReload()
+                                await self.parentVM.sendRequestAndReload()
                             }
                         }
-                        
-                        SubjectHStack(viewModel: viewModel)
+                    
+                    SubjectHStack(viewModel: viewModel, parentVM: parentVM)
                         
                    
                     }//else
@@ -69,20 +71,18 @@ struct FiltersButton : View{
 struct SubjectHStack : View{
     @Environment(\.colorScheme) private var colorScheme
 
-    @ObservedObject var viewModel: ImagesTableViewModel
+    @ObservedObject var viewModel: FiltersPanelViewModel
+    @ObservedObject var parentVM : ImagesTableViewModel
     
     @State  var subject : String = ""
-    private var title : String = "Title"
-    private var placeholder : String = ""
+     var title : String = "Title"
+     var placeholder : String = ""
     
-    @State private var goButtonEnabled : Bool = false
+    @State  var goButtonEnabled : Bool = false
+    
     private var goButtonBGColor: Color {
         return goButtonEnabled ? Color.green.opacity(0.5) : Color.gray.opacity(0.1)
         }
-    
-    init(viewModel: ImagesTableViewModel){
-        self.viewModel = viewModel
-    }
     
     var body: some View {
         
@@ -91,7 +91,7 @@ struct SubjectHStack : View{
                     print("Search button pressed!")
                     Task {
                         viewModel.subject = subject
-                        await viewModel.sendRequestAndReload()
+                        await self.parentVM.sendRequestAndReload()
                     }
                     
                 }){
@@ -118,9 +118,10 @@ struct SubjectHStack : View{
     }//body
 }
 
-struct SettingsPanelView_Previews: PreviewProvider {
+struct FiltersPanelView_Previews: PreviewProvider {
     
     static var previews: some View {
-        SettingsPanelView(viewModel: ImagesTableViewModel())
+        FiltersPanelView(parentVM: ImagesTableViewModel())
+//        FiltersPanelView(viewModel: ImagesTableViewModel())
     }
 }

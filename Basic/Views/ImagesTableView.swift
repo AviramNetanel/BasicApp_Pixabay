@@ -10,37 +10,46 @@ import SwiftUI
 import CoreData
 
 struct ImagesTableView: View {
-
-    @StateObject var viewModel = ImagesTableViewModel()
+    
+    @ObservedObject var viewModel : ImagesTableViewModel
+    @State var searchButtonPressed: Bool = false
     
     var body: some View {
                 
         NavigationView {
-            VStack{
+            ZStack{
+                
+                VStack{
+                    FiltersPanelView(parentVM: viewModel)
+                    
+                    List {
+                        ForEach(0..<$viewModel.photosVisible.count, id:\.self) { i in
+                            NavigationLink {
+                                ImageDetailsView(photo: $viewModel.photosVisible[i])
+                            } label: {
+                                ImageCellView(photo: $viewModel.photosVisible[i])
 
-                SettingsPanelView(viewModel: viewModel)
-                List {
-                    ForEach(0..<$viewModel.photosVisible.count, id:\.self) { i in
-                        NavigationLink {
-                            ImageDetailsView(photo: $viewModel.photosVisible[i])
-                        } label: {
-                            ImageCellView(photo: $viewModel.photosVisible[i])
-                            
-                        }.onAppear(){
-                            Task{
-                                await self.viewModel.loadMoreContent(currentItemIndex: i)
-                                print("photo index:\(i)")
+                            }.onAppear(){
+                                Task{
+                                    await self.viewModel.loadMoreContent(currentItemIndex: i)
+                                    print("photo index:\(i)")
+                                }
                             }
                         }
-                    }
-                }//List
-                    .listStyle(PlainListStyle())
-                    .task {
-                        if viewModel.photosVisible.count == 0{
-                            await viewModel.sendRequestAndReload()
+                    }//List
+                        .listStyle(PlainListStyle())
+                        .task {
+                            if viewModel.photosVisible.count == 0{
+                                await viewModel.sendRequestAndLoad()
+                            }
                         }
-                    }
-            }//VStack
+                }//VStack
+                
+                if viewModel.isLoading{
+                    ProgressView().scaleEffect(2.0)
+                }
+                
+            }
             
             
             .onAppear {

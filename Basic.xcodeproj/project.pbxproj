@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12261CA12981873B003B032C /* FiltersPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12261CA02981873B003B032C /* FiltersPanelViewModel.swift */; };
 		12367A7529467D6300C0AD38 /* PhotoExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12367A7429467D6300C0AD38 /* PhotoExtension.swift */; };
 		124371602972F616004F2473 /* BindingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1243715F2972F616004F2473 /* BindingExtension.swift */; };
 		1255DDBB293501B600EB9831 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1255DDBA293501B600EB9831 /* ViewExtension.swift */; };
@@ -30,7 +31,7 @@
 		1274F6D5292D563700C2A0EB /* ImageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1274F6D0292D563700C2A0EB /* ImageCellView.swift */; };
 		1274F6D6292D563700C2A0EB /* ImageDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1274F6D1292D563700C2A0EB /* ImageDetailsView.swift */; };
 		1274F6D7292D563700C2A0EB /* ImagesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1274F6D2292D563700C2A0EB /* ImagesTableView.swift */; };
-		1274F6D8292D563700C2A0EB /* SettingsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1274F6D3292D563700C2A0EB /* SettingsPanelView.swift */; };
+		1274F6D8292D563700C2A0EB /* FiltersPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1274F6D3292D563700C2A0EB /* FiltersPanelView.swift */; };
 		1274F6D9292D563700C2A0EB /* ImagesTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1274F6D4292D563700C2A0EB /* ImagesTableViewModel.swift */; };
 		129C646B292F958900F39F96 /* Pods_Basic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A9F0CD4311625867A2FE058 /* Pods_Basic.framework */; };
 		12CCCE1D292E38B60004201A /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 12CCCE1C292E38B60004201A /* Podfile */; };
@@ -78,6 +79,7 @@
 
 /* Begin PBXFileReference section */
 		0A9F0CD4311625867A2FE058 /* Pods_Basic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Basic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		12261CA02981873B003B032C /* FiltersPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersPanelViewModel.swift; sourceTree = "<group>"; };
 		12367A7429467D6300C0AD38 /* PhotoExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExtension.swift; sourceTree = "<group>"; };
 		1243715F2972F616004F2473 /* BindingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingExtension.swift; sourceTree = "<group>"; };
 		1255DDBA293501B600EB9831 /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
@@ -102,7 +104,7 @@
 		1274F6D0292D563700C2A0EB /* ImageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCellView.swift; sourceTree = "<group>"; };
 		1274F6D1292D563700C2A0EB /* ImageDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDetailsView.swift; sourceTree = "<group>"; };
 		1274F6D2292D563700C2A0EB /* ImagesTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTableView.swift; sourceTree = "<group>"; };
-		1274F6D3292D563700C2A0EB /* SettingsPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPanelView.swift; sourceTree = "<group>"; };
+		1274F6D3292D563700C2A0EB /* FiltersPanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersPanelView.swift; sourceTree = "<group>"; };
 		1274F6D4292D563700C2A0EB /* ImagesTableViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagesTableViewModel.swift; sourceTree = "<group>"; };
 		12CCCE1C292E38B60004201A /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		12CCCE23292E39FD0004201A /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
@@ -265,7 +267,8 @@
 				125B2C4A29303634005E4F8B /* ImageDetailsViewModel.swift */,
 				1274F6D2292D563700C2A0EB /* ImagesTableView.swift */,
 				1274F6D4292D563700C2A0EB /* ImagesTableViewModel.swift */,
-				1274F6D3292D563700C2A0EB /* SettingsPanelView.swift */,
+				1274F6D3292D563700C2A0EB /* FiltersPanelView.swift */,
+				12261CA02981873B003B032C /* FiltersPanelViewModel.swift */,
 				125B2C4C2930EC51005E4F8B /* ShareSheetController.swift */,
 				1255DDBA293501B600EB9831 /* ViewExtension.swift */,
 			);
@@ -499,7 +502,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1274F6C7292D54B100C2A0EB /* HitModel.swift in Sources */,
-				1274F6D8292D563700C2A0EB /* SettingsPanelView.swift in Sources */,
+				1274F6D8292D563700C2A0EB /* FiltersPanelView.swift in Sources */,
 				8DD9DC70293AB9C60026E782 /* NetworkManager.swift in Sources */,
 				124371602972F616004F2473 /* BindingExtension.swift in Sources */,
 				8DD9DC6E293AB0CC0026E782 /* ApiService.swift in Sources */,
@@ -510,6 +513,7 @@
 				125B2C4D2930EC51005E4F8B /* ShareSheetController.swift in Sources */,
 				1274F6BA292D523B00C2A0EB /* Basic.xcdatamodeld in Sources */,
 				1274F6B7292D523B00C2A0EB /* Persistence.swift in Sources */,
+				12261CA12981873B003B032C /* FiltersPanelViewModel.swift in Sources */,
 				1274F6D7292D563700C2A0EB /* ImagesTableView.swift in Sources */,
 				12367A7529467D6300C0AD38 /* PhotoExtension.swift in Sources */,
 				1274F6D5292D563700C2A0EB /* ImageCellView.swift in Sources */,
