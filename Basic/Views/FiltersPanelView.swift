@@ -14,14 +14,14 @@ struct FiltersPanelView: View {
     @StateObject var viewModel = FiltersPanelViewModel.shared
 
     @State private var selectedCategoryIndex : Int = 0
-    @State private var isExpanded: Bool = false
+    @State private var isExpanded: Bool = true
 
     var body: some View {
         Color.gray.opacity(0.1).overlay(
             VStack{
                 FiltersButton(isExpanded: $isExpanded)
-                if isExpanded{
-                        HStack{
+                if isExpanded{ //open panel:
+                        HStack{//category
                             Text("Category: ").padding(2)
                             Spacer()
                             Picker("Category", selection: $selectedCategoryIndex, content: {
@@ -38,6 +38,7 @@ struct FiltersPanelView: View {
                             }
                         }
                     
+                    //search for subject:
                     SubjectHStack(viewModel: viewModel, parentVM: parentVM)
                         
                    
@@ -76,7 +77,7 @@ struct SubjectHStack : View{
     
     @State  var subject : String = ""
      var title : String = "Title"
-     var placeholder : String = ""
+     var placeholder : String = "Search for..."
     
     @State  var goButtonEnabled : Bool = false
     
